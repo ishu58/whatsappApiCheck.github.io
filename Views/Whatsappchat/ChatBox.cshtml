@@ -1,0 +1,708 @@
+﻿
+@{
+    ViewBag.Title = "ChatBox";
+}
+<style>
+    .tree, .tree ul {
+        margin: 0;
+        padding: 0;
+        list-style: none
+    }
+
+        .tree ul {
+            margin-left: 1em;
+            position: relative
+        }
+
+            .tree ul ul {
+                margin-left: .5em
+            }
+
+            .tree ul:before {
+                content: "";
+                display: block;
+                width: 0;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                border-left: 1px solid
+            }
+
+        .tree li {
+            margin: 0;
+            padding: 0 1em;
+            line-height: 2em;
+            color: #369;
+            font-weight: 700;
+            position: relative
+        }
+
+        .tree ul li:before {
+            content: "";
+            display: block;
+            width: 10px;
+            height: 0;
+            border-top: 1px solid;
+            margin-top: -1px;
+            position: absolute;
+            top: 1em;
+            left: 0
+        }
+
+        .tree ul li:last-child:before {
+            background: #fff;
+            height: auto;
+            top: 1em;
+            bottom: 0
+        }
+
+    .indicator {
+        margin-right: 5px;
+    }
+
+    .tree li a {
+        text-decoration: none;
+        color: #369;
+    }
+
+    .tree li button, .tree li button:active, .tree li button:focus {
+        text-decoration: none;
+        color: #369;
+        border: none;
+        background: transparent;
+        margin: 0px 0px 0px 0px;
+        padding: 0px 0px 0px 0px;
+        outline: 0;
+    }
+
+    .test1 {
+        float: left;
+    }
+
+    .card-block {
+        min-height: 50px;
+    }
+</style>
+
+<hgroup class="title"></hgroup>
+
+<link rel="stylesheet" href="~/assets/css/basestyle/style.css">
+<div class="content-wrapper">
+    <div class="row page-tilte align-items-center">
+        <div class="col-md-auto">
+            <div class="container-fluid">
+
+                <div id="divCustomerCallBack" class="row flex-nowrap">
+                    @*<div class="col-3" onclick="GetMessageByClientId('919920582805@c.us')" style="cursor: pointer;">
+                            <div class="card card-block">Customer-1</div>
+                        </div>
+                        <div class="col-3" onclick="GetMessageByClientId('919920582805@c.us')" style="cursor: pointer;">
+                            <div class="card card-block">Customer-2</div>
+                        </div>
+                        <div class="col-3" onclick="GetMessageByClientId('919920582805@c.us')" style="cursor: pointer;">
+                            <div class="card card-block">Customer-3</div>
+                        </div>
+                        <div class="col-3" onclick="GetMessageByClientId('919920582805@c.us')" style="cursor: pointer;">
+                            <div class="card card-block">Customer-4</div>
+                        </div>
+                        <div class="col-3" onclick="GetMessageByClientId('919920582805@c.us')" style="cursor: pointer;">
+                            <div class="card card-block">Customer-5</div>
+                        </div>*@
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-5">
+            <div class="card mb-4">
+
+                <div class="card-header">
+                    Customer
+                    <div class="logintime ng-binding"> Interaction Time:  <span id='timer'></span> </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="messgaes" role="tabpanel" aria-labelledby="messgaes-tab">
+
+                            <div class="d-flex flex-column">
+                                <ul class="messgaes mb-4 anyClass" id="divChatWindow" style="height: 400px; overflow:auto;position: relative;" tabindex="5001"></ul>                                <div>
+                                    <hr class="dashed">
+                                </div>
+                                <div class="media align-items-center">
+
+
+                                    <div class="media-body">
+                                        <textarea name="" class="form-control border-0" placeholder="Reply Message" id="txtchat"></textarea>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" onclick="SendMsg()">Send Message</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+        <div class="col-lg-7">
+
+            <div class="card h-100">
+                <div class="card-header p-0">
+                    <ul class="nav nav-tabs active-thik nav-primary border-0" id="myTab" role="tablist">
+
+                        <li class="nav-item">
+                            <a class="nav-link px-4 py-3 rounded-0" id="appointmenst-tab" data-toggle="tab" href="#appointmenst" role="tab" aria-controls="appointmenst" aria-selected="false" title="Customer Info"><span class="material-icons md-18">person</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-4 py-3 rounded-0" id="other-tab" data-toggle="tab" href="#other" role="tab" aria-controls="other" aria-selected="false" title="Other Tab">
+                                <span class="material-icons md-18">alarm</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-4 py-3 rounded-0" id="chat-tab" data-toggle="tab" href="#chat" role="tab" aria-controls="other" aria-selected="false" title="Customer Journey">
+                                <span class="material-icons md-18">alarm</span>
+
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-4 py-3 rounded-0" id="chathis-tab" data-toggle="tab" href="#chathis" role="tab" aria-controls="other" aria-selected="false" title=" My Chat History">
+                                <span class="material-icons md-18">person_add</span>
+
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link px-4 py-3 rounded-0" id="agent-tab" data-toggle="tab" href="#agent" role="tab" aria-controls="other" aria-selected="false" title="Canned Messages">
+                                <span class="material-icons md-18">mail</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade" id="appointmenst" role="tabpanel" aria-labelledby="appointmenst-tab">
+                            <div class="row">
+
+                                <ul>
+                                    <li>
+                                        <div> Name : </div>
+                                    </li>
+                                    <li><div>Contact Number : </div></li>
+                                    <li><div>Email : </div></li>
+                                </ul>
+
+                            </div>
+
+                            <div id="calendar" class="mt-3"></div>
+                        </div>
+
+                        <div class="tab-pane fade" id="other" role="tabpanel" aria-labelledby="other-tab">
+                            <div class="content">
+
+                                <table id="example" class="table table-striped mb-4 bg-white table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="border-top-0"> Feedback </th>
+                                            <th scope="col" class="border-top-0">Channel  </th>
+                                            <th scope="col" class="border-top-0"> Name </th>
+                                            <th scope="col" class="border-top-0"> Date </th>
+                                            <th scope="col" class="border-top-0"> Disposition </th>
+                                            <th scope="col" class="border-top-0">Sub Disposition </th>
+                                            <th scope="col" class="border-top-0"> Remark </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="chat" role="tabpanel" aria-labelledby="chat-tab">
+                            <div class="row">
+                                <table id="example" class="table table-striped mb-4 bg-white table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="border-top-0"> Feedback </th>
+                                            <th scope="col" class="border-top-0">Channel  </th>
+                                            <th scope="col" class="border-top-0"> Name </th>
+                                            <th scope="col" class="border-top-0"> Date </th>
+                                            <th scope="col" class="border-top-0"> Disposition </th>
+                                            <th scope="col" class="border-top-0">Sub Disposition </th>
+                                            <th scope="col" class="border-top-0"> Remark </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+
+                            <div id="calendar" class="mt-3"></div>
+                        </div>
+                        <div class="tab-pane fade" id="chathis" role="tabpanel" aria-labelledby="chathis-tab">
+                            <div class="row">
+                            </div>
+                            <table id="example" class="table table-striped mb-4 bg-white table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="border-top-0"> Action </th>
+                                        <th scope="col" class="border-top-0">Role  </th>
+                                        <th scope="col" class="border-top-0"> Name </th>
+                                        <th scope="col" class="border-top-0"> Status </th>
+                                        <th scope="col" class="border-top-0"> Time </th>
+                                        <th scope="col" class="border-top-0">Duration </th>
+                                        <th scope="col" class="border-top-0"> Skills </th>
+                                        <th scope="col" class="border-top-0"> Capacity </th>
+                                        <th scope="col" class="border-top-0"> Active </th>
+                                    </tr>
+                                </thead>
+                            </table>
+
+                            <div id="calendar" class="mt-3"></div>
+                        </div>
+
+                        <div class="tab-pane fade" id="agent" role="tabpanel" aria-labelledby="agent-tab">
+                            <div class="row">
+                                <div class="col-lg-12">
+
+                                    <ul class="list-group">
+                                        <a data-toggle="collapse" href="#level-1" class="list-group-item list-group-item-action"><span class="material-icons mr-1 align-text-bottom md-18">keyboard_arrow_right</span> Dapibus ac facilisis in</a>
+                                        <li id="level-1" class="list-group-item collapse py-3">
+
+                                            <ul class="list-group">
+                                                <a data-toggle="collapse" href="#sub-1" class="list-group-item list-group-item-action">
+                                                    <span class="material-icons mr-1 align-text-bottom md-18">keyboard_arrow_right</span> Dapibus ac facilisis in
+                                                </a>
+                                                <li id="sub-1" class="list-group-item collapse">
+                                                    <div class="container" style="margin-top:30px;">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <ul id="tree1">
+                                                                    <li>
+                                                                        <a href="#">TECH</a>
+
+                                                                        <ul>
+                                                                            <li class="test2">Company Maintenance</li>
+                                                                            <li>
+                                                                                Employees
+                                                                                <ul>
+                                                                                    <li>
+                                                                                        Reports
+                                                                                        <ul>
+                                                                                            <li class="test2">Report1</li>
+                                                                                            <li class="test2">Report2</li>
+                                                                                            <li class="test2">Report3</li>
+                                                                                        </ul>
+                                                                                    </li>
+                                                                                    <li class="test2">Employee Maint.</li>
+                                                                                </ul>
+                                                                            </li>
+                                                                            <li class="test2">Human Resources</li>
+                                                                        </ul>
+                                                                    </li>
+                                                                    <li>
+                                                                        XRP
+                                                                        <ul>
+                                                                            <li class="test2">Company Maintenance</li>
+                                                                            <li>
+                                                                                Employees
+                                                                                <ul>
+                                                                                    <li>
+                                                                                        Reports
+                                                                                        <ul>
+                                                                                            <li class="test2">Report1</li>
+                                                                                            <li class="test2">Report2</li>
+                                                                                            <li class="test2">Report3</li>
+                                                                                        </ul>
+                                                                                    </li>
+                                                                                    <li class="test2">Employee Maint.</li>
+                                                                                </ul>
+                                                                            </li>
+                                                                            <li class="test2">Human Resources</li>
+                                                                        </ul>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                    </ul>
+
+
+
+                                </div>
+
+                            </div>
+
+                            <div id="calendar" class="mt-3"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+
+    <footer class="footer">
+        <p class="text-muted m-0"><small class="float-right">Made with <span class="material-icons md-16 text-danger align-middle">favorite</span> by Sneha </small><small>FreakPixels © 2020–2021 - freakpixels.com</small></p>
+    </footer>
+
+
+</div>
+
+<span id="time"></span>
+<input id="hdId" type="hidden" />
+<input id="PWCount" type="hidden" value="info" />
+<input id="hdUserName" type="hidden" />
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/assets/js/bootstrap/bootstrap.min.js"></script>
+@*<script src="~/Scripts/jquery.signalR-2.2.0.js"></script>
+    <script src="~/signalr/hubs"></script>*@
+<link href="~/assets/css/bootstrap-treeview.css" rel="stylesheet" />
+<script>
+    //$('#hdUserName').val(userName);
+    var gChatId;
+    const proxyurl = "https://cors-anywhere.herokuapp.com/";
+    var ListUsers;
+    $(document).ready(function () {
+        
+        getInstanceChat()
+        //$.post(proxyurl + "https://bin.chat-api.com/1i2a94x1?token=fvls4oworx7kcsq1",   // url
+        //    JSON.stringify({
+        //        "webhookUrl": "https://bin.chat-api.com/1a4kvdk1"
+        //    }), // data to be submit
+        //    function (req, status, jqXHR) {// success callback
+
+
+
+        //    }).done(function () { getInstanceChat(); })
+        //    .fail(function (jqxhr, settings, ex) { alert('failed, ' + ex); });
+
+
+
+    });
+
+    function getInstanceChat() {
+        debugger;
+        $.ajax({
+            type: 'POST',
+            //url: proxyurl + "https://bin.chat-api.com/1i2a94x1",
+            url: "/Whatsappchat/GetCallBackCustomerList/",
+
+            dataType: 'json',
+            contentType: 'application/json',
+            // data: JSON.stringify({
+            //     "webhookUrl": "http://localhost:51446/https://bin.chat-api.com/1i2a94x1"
+            //}),
+            success: function (data1) {
+                console.log(data1);
+                ListUsers = data1;
+                $("#divCustomerCallBack").html('');
+
+                var div3Content = '';
+
+                for (var i = 0; i < ListUsers.length; i++) {
+                    div3Content +=
+                        '<div class="col-3" onclick="GetMessageByClientId(' + ListUsers[i].mobile + ')" style="cursor: pointer;">' +
+                    '<div class="card card-block">' + ListUsers[i].mobile + '</div>' +
+                        '</div>';
+                }
+                $("#divCustomerCallBack").append(div3Content);
+            },
+            error: function (ex) {
+                alert(ex);
+            }
+        });
+
+    }
+
+    function SendMsg() {
+
+        var chatMsg = $('#txtchat').val();
+
+        if (chatMsg.length > 0) {
+            $.ajax({
+                type: 'POST',
+                url: proxyurl + "https://eu194.chat-api.com/instance193188/sendMessage?token=mj2p26tc79iodre3",
+                data: JSON.stringify({
+                    "chatId": "919920582805@c.us",
+
+                    "body": chatMsg
+                }),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                    GetMessageByClientId("919920582805@c.us");
+                    $("#txtchat").val('');
+                },
+                error: function (ex) {
+                    alert(ex);
+                }
+            });
+        }
+
+    }
+
+
+    function GetMessageByClientId(chatId) {
+        gChatId = chatId;
+        $.ajax({
+            type: 'GET',
+            url: proxyurl + "https://api.chat-api.com/instance193188/messages?token=mj2p26tc79iodre3&chatId=" + gChatId,
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (data) {
+
+                //for (i = 0; i < allUsers.length; i++) {
+
+                //    AddUser(chatHub, allUsers[i].ConnectionId, allUsers[i].UserName, allUsers[i].UserImage, allUsers[i].LoginTime);
+                //}
+                for (var i = 0; i < data.messages.length; i++) { // For each message
+                    var message = data.messages[i];
+                    AddMessage(message.chatId, message.body, message.time, message.UserImage);
+                    console.log(message.author + ': ' + message.body); //Send it to console
+                }
+
+                //for (i = 0; i < messages.length; i++) {
+                //    AddMessage(messages[i].UserName, messages[i].body, messages[i].Time, messages[i].UserImage);
+                //}
+            },
+            error: function (ex) {
+                alert(ex);
+            }
+        });
+
+    }
+
+
+    function AddMessage(userName, message, time, userimg) {
+
+        var CurrUser = $('#hdUserName').val();
+
+        var userId = $('#hdId').val();
+
+        var Side = 'right';
+        var TimeSide = 'left';
+
+        if (CurrUser == userName) {
+
+            if (CurrUser == userName) {
+                Side = 'left';
+                TimeSide = 'right';
+
+            }
+            var divChat =
+
+                '<li class="media">' +
+                '<div class="mr-4">' +
+                '<img class="user-thumb"  src="' + userimg + '" alt="Message User Image">' +
+                '</div>' +
+                '<div class="media-body messgae-bubble bg-warning-light25">' +
+
+                '<small class="text-muted weight-300">' + userName + '</small>' +
+
+                '<h6 class="mt-0 weight-400">' + message + '</h6>' +
+                '</div></li>';
+        }
+        else {
+            var divChat =
+                '<li class="media flex-row-reverse">' +
+                '<div class="mr-4">' +
+                '<img class="user-thumb" src="' + userimg + '" alt="Message User Image">' +
+                '</div>' +
+                '<div class="media-body from-you mr-4 messgae-bubble bg-light ">' +
+                '<small class="text-muted weight-300">' + userName + '</small>' +
+
+                '<h6 class="mt-0 weight-400">' + message + '</h6>' +
+                '</div></li>';
+        }
+
+        $('#divChatWindow').append(divChat);
+
+        $("#divChatWindow").stop().animate({ scrollTop: $("#divChatWindow")[0].scrollHeight }, 1000);
+    }
+
+
+    //function AddUser(chatHub, id, name, UserImage, date) {
+
+    //    var userId = $('#hdId').val();
+
+    //    var code = "";
+
+    //    if (userId == id) {
+    //        code = $(
+    //            ' <div class="media border-bottom px-3 py-4" id="Div' + id + '">' +
+    //            '<img class="mr-3 rounded" width="40"   src="' + UserImage + '" alt="User Image" />' +
+    //            '<div class="media-body">' +
+    //            '<h6 class="m-0 weight-400">' + name + '</h6>' + '<span class="text-muted pull-right">' + date +
+    //            '</span></div></div>');
+    //    }
+    //    else {
+
+    //        code = $(
+    //            ' <div class="media border-bottom px-3 py-4" id="Div' + id + '">' +
+    //            '<img class="mr-3 rounded" width="40"   src="' + UserImage + '" alt="User Image" />' +
+    //            '<div class="media-body">' +
+    //            '<h6 class="m-0 weight-400">' + name + '</h6>' +
+    //            '<span class="text-muted pull-right">' + date +
+    //            '</span></div></div>');
+
+    //    }
+
+
+    //    var UserLink = $('<a id="' + id + '" class="user" >' + name + '<a>');
+    //    $(code).click(function () {
+
+    //        var id = $(UserLink).attr('id');
+
+    //        if (userId != id) {
+    //            var ctrId = 'private_' + id;
+    //            OpenPrivateChatBox(chatHub, id, name);
+
+    //        }
+
+    //    });
+
+
+    //    $("#divusers").append(code);
+
+    //}
+
+
+    // On User Disconnected
+    //chatHub.client.onUserDisconnected = function (id, userName) {
+
+    //    $('#Div' + id).remove();
+
+    //    var ctrId = 'private_' + id;
+    //    $('#' + ctrId).remove();
+
+
+    //    var disc = $('<div class="disconnect">"' + userName + '" logged off.</div>');
+
+    //    $(disc).hide();
+    //    $('#divusers').prepend(disc);
+    //    $(disc).fadeIn(200).delay(2000).fadeOut(200);
+
+    //}
+
+
+
+
+    $(document).ready(function () {
+        timedCount();
+
+    });
+    var c = 600;
+    var t;
+
+
+    function timedCount() {
+
+        var hours = parseInt(c / 3600) % 24;
+        var minutes = parseInt(c / 60) % 60;
+        var seconds = c % 60;
+
+        var result = (hours > 10 ? "0" + hours : hours) + ":" + (minutes > 10 ? "0" + minutes : minutes) + ":" + (seconds > 10 ? "0" + seconds : seconds);
+
+
+        $('#timer').html(result);
+        if (c == 0) {
+            //setConfirmUnload(false);
+
+            window.location = "/Home/slogin";
+        }
+        c = c - 1;
+        t = setTimeout(function () {
+            timedCount()
+        },
+            1000);
+    }
+
+    var date1 = new Date();
+
+    var hour = date1.getHours();
+    var time = 4;
+
+
+
+    $.fn.extend({
+        treed: function (o) {
+
+            var openedClass = 'material-icons d-block mb-1 test1';
+            var closedClass = 'material-icons d-block mb-1 test1';
+
+            if (typeof o != 'undefined') {
+                if (typeof o.openedClass != 'undefined') {
+                    openedClass = o.openedClass;
+                }
+                if (typeof o.closedClass != 'undefined') {
+                    closedClass = o.closedClass;
+                }
+            };
+
+            //initialize each of the top levels
+            var tree = $(this);
+            tree.addClass("tree");
+            tree.find('li').has("ul").each(function () {
+                var branch = $(this); //li with children ul
+                branch.prepend("<i class='" + closedClass + "'>folder</i>");
+                branch.addClass('branch');
+                branch.on('click', function (e) {
+                    if (this == e.target) {
+                        var icon = $(this).children('i:first');
+                        icon.toggleClass(openedClass + " " + closedClass);
+                        $(this).children().children().toggle();
+                    }
+                })
+                branch.children().children().toggle();
+            });
+            //fire event from the dynamically added icon
+            tree.find('.branch .indicator').each(function () {
+                $(this).on('click', function () {
+                    $(this).closest('li').click();
+                });
+            });
+            //fire event to open branch if the li contains an anchor instead of text
+            tree.find('.branch>a').each(function () {
+                $(this).on('click', function (e) {
+                    $(this).closest('li').click();
+                    e.preventDefault();
+                });
+            });
+            //fire event to open branch if the li contains a button instead of text
+            tree.find('.branch>button').each(function () {
+                $(this).on('click', function (e) {
+                    $(this).closest('li').click();
+                    e.preventDefault();
+                });
+            });
+        }
+    });
+
+    //Initialization of treeviews
+
+    $('#tree1').treed();
+    var str = "";
+    $(document).on('dblclick', '.test2', function () {
+        alert($(this).text());
+        str += ' ' + $(this).text();
+        $('#txtchat').val(str)
+    });
+
+
+</script>

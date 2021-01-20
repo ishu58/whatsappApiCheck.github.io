@@ -1,0 +1,153 @@
+﻿@model ChatSupport_Anchor.Models.LoginViewModal
+
+@{
+    ViewBag.Title = "Login";
+    Layout = null;
+}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Base CSS -->
+    <link rel="stylesheet" href="assets/css/basestyle/style.css">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Fontawesome Icons -->
+    <link href="~/assets/css/fontawesome/fontawesome-all.min.css" rel="stylesheet" />
+    <link href="~/assets/css/pages/login.css" rel="stylesheet" />
+    <title>Whatsapp Chat Anchor</title>
+</head>
+<body>
+
+    <section class="wrapper">
+
+        <div class="login">
+            <div class="image-placeholder">
+                <h1>Lorem ipsum dolor sit amet<br>consectetur pellentesque adipiscing elit.</h1>
+            </div>
+            <div class="form">
+
+                
+
+                <div class="text-center mb-4"><span class="material-icons text-danger" style="font-size:6rem;">wifi_tethering</span></div>
+                <h3 class="h4 mb-5 text-center"> Login</h3>
+
+                <form id="log_in" method="post">
+
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(m => m.hdrandomSeed)
+
+                    <div class="form-group">
+                        <label for="UserName">Username</label>
+                        <input type="text" class="form-control" id="UserName" name="UserName" @*aria-describedby="emailHelp"*@ placeholder="Enter UserName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Password">Password</label>
+                        <input type="password" class="form-control" id="Password" name="Password" placeholder="Password" required>
+                    </div>
+
+                    @*<div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Remember me</label>
+            <a href="#" data-toggle="modal" data-target="#forgotPassword" class="float-right">Password ?</a>
+        </div>*@
+
+                    <input type="submit" id="btnLogin" class="btn mt-4 btn-primary btn-block" value="Log In">
+
+                    @*<a href="#" id="btnLogin" class="btn mt-4 btn-primary btn-block">Login</a>*@
+                </form>
+            </div>
+        </div>
+
+    </section>
+
+    <div class="modal fade " id="forgotPassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title" id="exampleModalLabel">Forgot Your Password ?</div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email or Username</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Reset Password</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/bootstrap/bootstrap.min.js"></script>
+    <script src="~/Scripts/custom.js"></script>
+    <script src="~/Scripts/md5.js"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56821827-7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-56821827-7');
+
+        $(document).ready(function () {
+            $('#btnLogin').click(function () {
+                if ($('#Password').val() != "") {
+                    var seed = $('#hdrandomSeed');
+                    return md5auth(seed.val());
+                }
+                $("#log_in").submit();
+            });
+        });
+
+        $(function () {
+            var controls = $(".disable");
+            controls.bind("paste", function () {
+                return false;
+            });
+            controls.bind("drop", function () {
+                return false;
+            });
+            controls.bind("cut", function () {
+                return false;
+            });
+            controls.bind("copy", function () {
+                return false;
+            });
+        });
+
+        function md5auth(seed) {
+            var password1 = $('#Password');
+            var password = password1.val();
+            var hash = calcMD5(seed + calcMD5(password).toUpperCase());
+            password1.val(hash.toUpperCase());
+            return true;
+        }
+
+    </script>
+
+    @if (@ViewBag.Message != null)
+    {
+        <script type="text/javascript">
+            $(function () {
+                alert("@ViewBag.Message")
+            });
+        </script>
+    }
+
+</body>
+</html>
+

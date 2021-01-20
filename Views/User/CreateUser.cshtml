@@ -1,0 +1,106 @@
+﻿@model ChatSupport_Anchor.Models.UserMaster
+
+@{
+    ViewBag.Title = "CreateUser";
+}
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Base CSS -->
+    <link rel="stylesheet" href="assets/css/basestyle/style.css">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Fontawesome Icons -->
+    <link href="~/assets/css/fontawesome/fontawesome-all.min.css" rel="stylesheet" />
+    <link href="~/assets/css/pages/login.css" rel="stylesheet" />
+    <title>Whatsapp Chat Anchor</title>
+</head>
+<body>
+
+    <section class="wrapper">
+
+        <div class="login">
+            <div class="image-placeholder">
+                <h1>Lorem ipsum dolor sit amet<br>consectetur pellentesque adipiscing elit.</h1>
+            </div>
+            <div class="form">
+                <div class="text-center mb-4"><span class="material-icons text-danger" style="font-size:6rem;">wifi_tethering</span></div>
+                <h3 class="h4 mb-5 text-center">Create User</h3>
+
+                <form>
+                    @Html.AntiForgeryToken()
+
+
+                    <div class="form-group">
+                        <label for="exampleInputUserName1">User Name</label>
+                        @Html.TextBoxFor(model => model.UserName, new { @class = "form-control", @id = "exampleInputUserName1", @placeholder = "User Name" })
+                        @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "text-danger" })
+                        @*<input type="text" class="form-control" id="exampleInputUserName1" aria-describedby="emailHelp" placeholder="User Name">*@
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Full Name</label>
+                        @Html.TextBoxFor(model => model.FullName, new { @class = "form-control", @id = "exampleInputEmail1", @placeholder = "Enter Full Name" })
+                        @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+                        @*<input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Full Name">*@
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputContactNo1">Contact No.</label>
+                        @Html.TextBoxFor(model => model.Mobile, new { @class = "form-control", @id = "exampleInputContactNo1", @placeholder = "Contact No" })
+                        @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
+                        @*<input type="text" class="form-control" id="exampleInputContactNo1" aria-describedby="emailHelp" placeholder="Contact No">*@
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email </label>
+                        @Html.TextBoxFor(model => model.EmailID, new { @class = "form-control", placeHolder = "Enter email", name = "email", id = "exampleInputEmail1" })
+                        @Html.ValidationMessageFor(m => m.EmailID, "", new { @class = "text-danger" })
+
+                        @*<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">*@
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label>
+                        @*<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">*@
+                        @Html.PasswordFor(model => model.Password, new { @class = "form-control", placeholder = "Password", name = "Password", @id = "exampleInputPassword1" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Re Password</label>
+                        @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "form-control", placeHolder = "Confirm Password", name = "Confirm Password", @id = "exampleInputPassword1" })
+                        @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+                        @*<input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">*@
+                    </div>
+
+                    <input type="submit" id="btnSignUp" class="btn mt-4 btn-primary btn-block" value="Sign Up">
+                </form>
+            </div>
+        </div>
+
+    </section>
+
+
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/bootstrap/bootstrap.min.js"></script>
+    <script src="~/Scripts/custom.js"></script>
+    <script src="~/Scripts/md5.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-56821827-7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-56821827-7');</script>
+</body>
+</html>
